@@ -1,0 +1,5 @@
+gcc -g -w -O2 -nostdinc -fno-builtin -ffreestanding -c run.c -o run.o
+gcc -g -w -O2 -nostdinc -fno-builtin -ffreestanding -c string.c -o cstring.o
+ld -g -nostdlib -T binary.ld run.o cstring.o -o run
+cp run mnt
+sync

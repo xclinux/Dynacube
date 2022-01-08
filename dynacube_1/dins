@@ -1,0 +1,70 @@
+CPP="g++ -g -O0 -nostdinc -fno-builtin -ffreestanding -fno-rtti -fno-exceptions -c "
+CC="gcc -g -O0 -nostdinc -fno-builtin -ffreestanding -c "
+OPTIONS=" -save-temps -w"
+#OPTIONS=""
+INCLUDE="."
+#INCLUDE="include"
+NASM="nasm -f elf "
+LDSCRIPT=" krnl.ld "
+LD="ld -g -nostdlib"
+
+CSOURCE="main.c kstdio.c kasm.c kint.c kdesc.c kinit.c kio.c string.c stdlib.c keyboard.c mm.c proc.c kpit.c kpic.c ktime.c ktask.c queue.c message.c zorder.c floppy.c fat12.c mouse.c svga.c vm86.c stack.c graphics.c font.c hashmap.c icon.c client_fs.c"
+CPPSOURCE="gui.cpp container.cpp window.cpp frame.cpp component.cpp list.cpp button.cpp text.cpp textarea.cpp label.cpp paintcomp.cpp startmenu.cpp cursor.cpp utility.cpp folderview.cpp"
+OBJS="dstart.o main.o kstdio.o kasm.o kint.o kdesc.o kinit.o kio.o string.o stdlib.o keyboard.o mm.o proc.o kpit.o cmos.o message.o kpic.o ktime.o ktask.o queue.o zorder.o gui.o container.o window.o frame.o floppy.o fat12.o mouse.o svga.o vm86.o stack.o graphics.o component.o font.o hashmap.o list.o button.o text.o textarea.o label.o paintcomp.o startmenu.o cursor.o utility.o folderview.o icon.o client_fs.o clipboard.o"
+
+TESTAPPS="run.c explorer.c null_proc.c timeset.c calc.c"
+
+clear
+
+echo rm *.x
+rm *.x
+
+echo ${CC} ${OPTIONS} -I ${INCLUDE} ${CSOURCE}
+${CC} ${OPTIONS} -I ${INCLUDE}  main.c kint.c #cmos.c #${CSOURCE}
+
+echo ${CPP} ${OPTIONS} -I ${INCLUDE} ${CPPSOURCE}
+${CPP} ${OPTIONS} -I ${INCLUDE} gui.cpp text.cpp clipboard.cpp #${CPPSOURCE}
+
+echo ${NASM} dstart.asm
+${NASM} dstart.asm
+
+echo ${LD} -T ${LDSCRIPT} ${OBJS} -o D0.x
+${LD} -T ${LDSCRIPT} ${OBJS} -o D0.x
+
+${CC} ${OPTIONS} -I ${INCLUDE}  ${TESTAPPS}
+${LD} -T binary.ld run.o string.o  -o run
+${LD} -T binary.ld explorer.o string.o -o explorer
+${LD} -T binary.ld null_proc.o -o null_proc
+${LD} -T binary.ld calc.o string.o stdlib.o -o calc
+#${LD} -T binary.ld test_out.o -o test_out
+#${LD} -T binary.ld text.o -o text
+${LD} -T binary.ld timeset.o string.o stdlib.o -o timeset
+
+cp run mnt
+cp explorer mnt
+cp null_proc mnt
+#cp test mnt
+#cp test_out mnt
+#cp text mnt
+cp timeset mnt
+cp calc mnt
+
+#Symbol Dumping
+nm -s D0.x | sort > D0Sym.txt
+
+strip -s -R .comment D0.x
+
+#Listing
+objdump -s D0.x > D0dump.txt
+
+#rm *.o *.i *.s *.ii
+#rm *.o
+
+rm -f /mnt/floppy/*.x
+
+cp D0.x ./mnt
+sync
+
+
+
+

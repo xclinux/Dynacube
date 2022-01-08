@@ -1,0 +1,3 @@
+
+echo mounting disk image @ /mnt/floppy
+mount /root/source/guigrub.img ./mnt -o loop

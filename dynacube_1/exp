@@ -1,0 +1,5 @@
+gcc -g -w -O2 -nostdinc -fno-builtin -ffreestanding -c explorer.c -o explorer.o
+gcc -g -w -O2 -nostdinc -fno-builtin -ffreestanding -c string.c -o cstring.o
+ld -g -nostdlib -T binary.ld explorer.o cstring.o -o explorer
+cp explorer mnt
+sync

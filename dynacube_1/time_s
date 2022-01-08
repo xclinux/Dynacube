@@ -1,0 +1,6 @@
+gcc -g -w -O2 -nostdinc -fno-builtin -ffreestanding -c timeset.c -o timeset.o
+gcc -g -w -O2 -nostdinc -fno-builtin -ffreestanding -c string.c -o cstring.o
+gcc -g -w -save-temps -O2 -nostdinc -fno-builtin -ffreestanding -c stdlib.c -o cstdlib.o
+ld -g -nostdlib -T binary.ld timeset.o cstring.o cstdlib.o -o timeset
+cp timeset mnt
+sync

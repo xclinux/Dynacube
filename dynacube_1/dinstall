@@ -1,0 +1,50 @@
+CPP="g++ -g -O2 -nostdinc -fno-builtin -ffreestanding -fno-rtti -fno-exceptions -c "
+CC="gcc -g -O2 -nostdinc -fno-builtin -ffreestanding -c "
+OPTIONS=" -save-temps -w"
+#OPTIONS=""
+INCLUDE="."
+#INCLUDE="include"
+NASM="nasm -f elf "
+LDSCRIPT=" krnl.ld "
+LD="ld -g -nostdlib"
+
+CSOURCE="main.c kstdio.c kasm.c kint.c kdesc.c kinit.c kio.c string.c stdlib.c keyboard.c mm.c proc.c kpit.c kpic.c ktime.c cmos.c ktask.c queue.c message.c zorder.c floppy.c fat12.c mouse.c svga.c vm86.c stack.c graphics.c font.c hashmap.c icon.c client_fs.c"
+CPPSOURCE="gui.cpp container.cpp window.cpp frame.cpp component.cpp list.cpp button.cpp text.cpp textarea.cpp label.cpp paintcomp.cpp startmenu.cpp cursor.cpp utility.cpp folderview.cpp clipboard.cpp"
+OBJS="dstart.o main.o kstdio.o kasm.o kint.o kdesc.o kinit.o kio.o string.o stdlib.o keyboard.o mm.o proc.o kpit.o kpic.o ktime.o cmos.o ktask.o queue.o message.o zorder.o gui.o container.o window.o frame.o floppy.o fat12.o mouse.o svga.o vm86.o stack.o graphics.o component.o font.o hashmap.o list.o button.o text.o textarea.o label.o paintcomp.o startmenu.o cursor.o utility.o folderview.o icon.o client_fs.o clipboard.o"
+
+clear
+
+echo rm *.x
+rm *.x
+
+echo ${CC} ${OPTIONS} -I ${INCLUDE} ${CSOURCE}
+${CC} ${OPTIONS} -I ${INCLUDE} ${CSOURCE}
+
+echo ${CPP} ${OPTIONS} -I ${INCLUDE} ${CPPSOURCE}
+${CPP} ${OPTIONS} -I ${INCLUDE} ${CPPSOURCE}
+
+echo ${NASM} dstart.asm
+${NASM} dstart.asm
+
+echo ${LD} -T ${LDSCRIPT} ${OBJS} -o D0.x
+${LD} -T ${LDSCRIPT} ${OBJS} -o D0.x
+
+#Symbol Dumping
+nm -s D0.x | sort > D0Sym.txt
+
+strip -s -R .comment D0.x
+
+#Listing
+objdump -s D0.x > D0dump.txt
+
+#rm *.o *.i *.s *.ii
+#rm *.o
+
+rm -f /mnt/floppy/*.x
+
+cp D0.x ./mnt
+sync
+
+
+
+

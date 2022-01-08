@@ -1,0 +1,31 @@
+
+GCC Inline Assembly
+===================
+
+1) you can use * to jump to a particular function
+
+eg:
+	int main(void)
+	{
+		cls();
+
+		kprint("Dynacube\t1.0\tLoading [dd/mm/yyyy]\n");
+		kprint("------------------------------------------------------\n");
+
+		kdump();
+		asm("call *%0"::"a"(main));
+	}
+
+GCC C
+=====
+
+
+INTEL
+=====
+
+
+General
+=======
+1. PCI pmode bios entry : 0xF:0xABB0 checksum = 0
+2. PMID:  0xC:0x53E0
+

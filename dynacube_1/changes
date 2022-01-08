@@ -1,0 +1,19 @@
+component.h - DISABLED style
+all comps - style added
+text,textarea,keyboard
+gui - changes for all disabled style,set and get
+in all inits, change x % SCREEN_HEIGHT to width
+timer
+proc.c - exit
+zorder - removeall
+list -removeall
+kint - timer,create,date and time
+window.cpp - changes for disabled
+clipboard
+string
+client_gui
+fat12,floppy
+stdlib - removed printf,atoi
+mm - added get_phys
+cmos
+calc,time,run

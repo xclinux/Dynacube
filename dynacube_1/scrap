@@ -1,0 +1,191 @@
+/---------------------------------16 Jan 2004---------------------------------/
+
+// memcpy((void *)(0xC58000),reti,512);
+
+// for(temp = 1;temp < 32;temp++)
+// {
+// memcpy((void *)(0xA00000+temp*MAX_PROC_SIZE),reti,512);
+//// create();
+// }
+
+// cls();
+// printf("\nPhy Add %x",ltop(0x10000000-1));
+
+
+//Some other day
+Log:
+can_push(): SS_INVALIDATED
+
+/---------------------------------main.c---------------------------------/
+
+struct desc
+{
+ DD base;
+ DW limit;
+}a;
+
+ __asm__ ("sgdt %0"::"m"(a));
+
+ kprint("\nBase : \t");
+ kprintnum(a.base,16);
+ kprint("\tLimit : \t");
+ kprintnum(a.limit,16);
+
+
+// 28 - 12 - 2003
+/***************************************************************************
+                          main.c  -  description
+                             -------------------
+    begin                : Sat Dec 13 2003
+    copyright            : (C) 2003 by J.Mohammed Hassan Shah
+    email                : mdshah82@yahoo.com
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software; you can redistribute it and/or modify  *
+ *   it under the terms of the GNU General Public License as published by  *
+ *   the Free Software Foundation; either version 2 of the License, or     *
+ *   (at your option) any later version.                                   *
+ *                                                                         *
+ ***************************************************************************/
+
+#include "kmaster.h"
+
+#include "stdlib.h"
+#include "string.h"
+#include "mm.h"
+#include "proc.h"
+
+int main(void)
+{
+ //Global Initialization
+ //Perhaps should replace it with some init()
+ row = 0, col = 0;
+ int temp = 123;
+ char *_data;
+
+ cls();
+
+ kprint("Dynacube\t1.0\tLoading [dd/mm/yyyy]\n");
+ kprint("------------------------------------------------------\n");
+
+ gdt_init();
+
+ kprint("\nSystem Descriptors Loaded................ ");
+
+ pic_init();
+ kprint("\nPIC remapped................ \n");
+
+ outb(0x21,~2);
+ outb(0xA1,~00);
+
+ sti();
+
+ mm_init();
+
+ proc_init();
+
+ //kdump();
+
+ cls();
+ for(temp = 0 ; temp < NUM_PAGES ; temp++)
+ {
+	 //printf("\tpgnum %d",findpage());
+	 printf("%d ",findpage());
+ }
+
+ freepage(25);
+ freepage(64);
+ freepage(43);
+ freepage(0);
+
+ printf("\New Allocations");
+
+ for(temp = 0 ; temp < 5 ; temp++)
+ {
+	 //printf("\tpgnum %d",findpage());
+	 printf("%d ",findpage());
+ }
+
+ fork();
+
+ while(1);
+
+ return 0;
+}
+
+/*
+ printf("\nTEMP %b",temp);
+ __asm__ __volatile__ ("":"=a"(temp));
+ printf("\nEAX %b",temp);
+
+ __asm__ __volatile__ ("movl %cr0, %eax");
+
+ printf("\nCR0: %b",temp);
+
+ __asm__ __volatile__("int %0"::"i"(0x30));
+ __asm__ __volatile__("int %0"::"i"(0x0));
+
+*/
+
+
+/* 27-12-2003
+
+ printf("\nTEMP %b",temp);
+ __asm__ __volatile__ ("":"=a"(temp));
+ printf("\nEAX %b",temp);
+
+ //__asm__ __volatile__ ("movl %%eax,%%cr0"::"a"(0x0));
+
+ //__asm__ __volatile__ ("movl %%eax,%%cr3"::"a"(0xFFFF0000));
+
+ __asm__ __volatile__ ("movl %%cr0, %%eax":"=a"(temp));
+ printf("\nCR0: %b\t%x",temp,temp);
+
+ __asm__ __volatile__ ("movl %%cr3, %%eax":"=a"(temp));
+ printf("\nCR3: %b\t%x",temp,temp);
+
+
+ __asm__ __volatile__ ("movl %%cr0, %%eax":"=a"(temp));
+
+ __asm__ __volatile__ ("movl %%eax,%%cr0"::"a"(temp | (1<<31)));
+
+ __asm__ __volatile__("divl %%ebx"::"b"(0));
+
+
+ __asm__ __volatile__("divl %%ebx"::"b"(0));
+
+ __asm__ __volatile__ ("movl %%cr0, %%eax":"=a"(temp));
+ printf("\nCR0: %b\t%x",temp,temp);
+
+ //__asm__ __volatile__ ("movw $0x0103,%ax");
+ //__asm__ __volatile__ ("int %0"::"i"(0x10));
+
+ __asm__ __volatile__("int %0"::"i"(0x30));
+
+
+*/
+
+
+// Memory probing
+
+   c = (char *)&_ldte[pid][0];
+   printf("\nHex Dump: %x %x\n",*((DD*)&_ldte[pid][0]),*(((DD*)&_ldte[pid][0])+1));
+   for(i=8;i >= 1;i--)
+   {
+    printf("%x ",*(c+i-1)&0xFF);
+   }
+
+
+
+
+
+
+
+
+
+
+
+
+

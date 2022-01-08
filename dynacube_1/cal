@@ -1,0 +1,6 @@
+gcc -g -w -save-temps -O2 -nostdinc -fno-builtin -ffreestanding -c calc.c -o calc.o
+gcc -g -w -save-temps -O2 -nostdinc -fno-builtin -ffreestanding -c string.c -o cstring.o
+gcc -g -w -save-temps -O2 -nostdinc -fno-builtin -ffreestanding -c stdlib.c -o cstdlib.o
+ld -g -nostdlib -T binary.ld calc.o cstring.o cstdlib.o -o calc
+cp calc mnt
+sync

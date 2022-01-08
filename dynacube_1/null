@@ -1,0 +1,4 @@
+gcc -g -O2 -nostdinc -fno-builtin -ffreestanding -c null_proc.c -o null_proc.o
+ld -g -nostdlib -T binary.ld null_proc.o -o null_proc
+cp null_proc mnt
+sync
